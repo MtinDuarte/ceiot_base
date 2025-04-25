@@ -27,10 +27,10 @@
 
 /* HTTP constants that aren't configurable in menuconfig */
 #define WEB_PATH "/measurement"
-
+#define DEVICE_KEY  "myesp32"
 static const char *TAG = "temp_collector";
 
-static char *BODY = "id="DEVICE_ID"&t=%0.2f&h=%0.2f";
+static char *BODY = "id=%s&key="DEVICE_KEY"&t=%0.2f&h=%0.2f";
 
 static char *REQUEST_POST = "POST "WEB_PATH" HTTP/1.0\r\n"
     "Host: "API_IP_PORT"\r\n"
@@ -51,13 +51,23 @@ static void http_get_task(void *pvParameters)
     int s, r;
     char body[64];
     char recv_buf[64];
-
+    uint8_t baseMac[6] = {0};char mac_str[18];
     char send_buf[256];
 
     bmp280_params_t params;
     bmp280_init_default_params(&params);
     bmp280_t dev;
     memset(&dev, 0, sizeof(bmp280_t));
+    
+    if (esp_wifi_get_mac(WIFI_IF_STA, baseMac) == ESP_OK)
+    {
+        sprintf(mac_str,"%02x:%02x:%02x:%02x:%02x:%02x",
+            baseMac[0], baseMac[1], baseMac[2],
+            baseMac[3], baseMac[4], baseMac[5]);
+            
+        ESP_LOGI(TAG,"Success obtaining mac address!");
+    }else
+        ESP_LOGE(TAG,"Error obtaining mac address!");    
 
     ESP_ERROR_CHECK(bmp280_init_desc(&dev, BMP280_I2C_ADDRESS_0, 0, SDA_GPIO, SCL_GPIO));
     ESP_ERROR_CHECK(bmp280_init(&dev, &params));
@@ -76,7 +86,7 @@ static void http_get_task(void *pvParameters)
             ESP_LOGI(TAG, "Pressure: %.2f Pa, Temperature: %.2f C", pressure, temperature);
 //            if (bme280p) {
                 ESP_LOGI(TAG,", Humidity: %.2f\n", humidity);
-		sprintf(body, BODY, temperature , humidity );
+		        sprintf(body, BODY, mac_str,temperature,humidity);
                 sprintf(send_buf, REQUEST_POST, (int)strlen(body),body );
 //	    } else {
 //                sprintf(send_buf, REQUEST_POST, temperature , 0);
