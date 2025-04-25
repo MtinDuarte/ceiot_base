@@ -50,12 +50,68 @@ app.post('/measurement', function (req, res) {
 	res.send("received measurement into " +  insertedId);
 });
 
-app.post('/device', function (req, res) {
-	console.log("device id    : " + req.body.id + " name        : " + req.body.n + " key         : " + req.body.k );
+//#region  Device Management
+app.delete('/device', function (req, res)
+{
+    const { id, n: name, k: key } = req.body;
 
-    db.public.none("INSERT INTO devices VALUES ('"+req.body.id+ "', '"+req.body.n+"', '"+req.body.k+"')");
-	res.send("received new device");
+    console.log(`device id: ${id}, name: ${name}, key: ${key}`);
+
+    // Verificamos si el dispositivo ya existe
+    const existing = db.public.many(`SELECT * FROM devices WHERE device_id = '${id}'`);
+
+    if (existing.length > 0) {
+        // Si existe, UPDATE
+        db.public.none(" DELETE FROM devices WHERE  device_id = '" + req.body.id + "'")
+        
+        res.send("Device deleted!");
+                
+        console.log("Device deleted!");
+    } else 
+    {        
+        res.send("Wrong data");
+    }
 });
+app.put('/device', function (req, res)
+{
+    const { id, n: name, k: key } = req.body;
+
+    console.log(`device id: ${id}, name: ${name}, key: ${key}`);
+
+    // Verificamos si el dispositivo ya existe
+    const existing = db.public.many(`SELECT * FROM devices WHERE device_id = '${id}'`);
+
+    if (existing.length > 0) {
+        // Si existe, UPDATE
+        db.public.none(" UPDATE devices  SET name = '" + req.body.n + "', key = '" + req.body.k + "' WHERE  device_id = '" + req.body.id + "'")
+        
+        console.log("Device updated!");
+
+        res.send("Device UPDATED!");
+    } else 
+    {
+        console.log("Device wrong, incorrect or does not exist!");
+        res.send("Wrong data");
+    }
+});
+app.post('/device', function (req, res) {
+    const { id, n: name, k: key } = req.body;
+
+    console.log(`device id: ${id}, name: ${name}, key: ${key}`);
+
+    // Verificamos si el dispositivo ya existe
+    const existing = db.public.many(`SELECT * FROM devices WHERE device_id = '${id}'`);
+
+    if (existing.length > 0) {
+        res.send("Device already exist!");
+    } else {
+        // Si no existe, hacemos INSERT
+        db.public.none(" INSERT INTO devices VALUES ('" + req.body.id + "' , '" + req.body.n + "','" + req.body.k + "' )")
+
+        res.send("Device INSERTED!");
+    }
+});
+//#endregion 
 
 
 app.get('/web/device', function (req, res) {
@@ -75,7 +131,6 @@ app.get('/web/device', function (req, res) {
 		     "</body>" +
 		"</html>");
 });
-
 app.get('/web/device/:id', function (req,res) {
     var template = "<html>"+
                      "<head><title>Sensor {{name}}</title></head>" +
@@ -91,8 +146,6 @@ app.get('/web/device/:id', function (req,res) {
     console.log(device);
     res.send(render(template,{id:device[0].device_id, key: device[0].key, name:device[0].name}));
 });	
-
-
 app.get('/term/device/:id', function (req, res) {
     var red = "\33[31m";
     var green = "\33[32m";
@@ -105,11 +158,9 @@ app.get('/term/device/:id', function (req, res) {
     console.log(device);
     res.send(render(template,{id:device[0].device_id, key: device[0].key, name:device[0].name}));
 });
-
 app.get('/measurement', async (req,res) => {
     res.send(await getMeasurements());
 });
-
 app.get('/device', function(req,res) {
     res.send( db.public.many("SELECT * FROM devices") );
 });
