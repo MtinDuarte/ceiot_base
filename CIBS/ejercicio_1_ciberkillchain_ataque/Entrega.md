@@ -9,7 +9,7 @@
 - Una opción es una plataforma web, que puede ser accedida através de una IP pública por usuario y contraseña. La segunda opción es através de una aplicación de celular con S.O Android. 
 - Los datos de las plantas y su pertenencia de cada cliente son almacenados en una base de datos en AWS para su procesamiento, pago mensual, usuario y contraseña. 
 
-![imagen-del-sistema-IA](sistemaPropuestoIA.png)
+<center><img src="sistemaPropuestoIA.png" alt="sistemaPropuestoIA" width="40%"/></center>
 
 
 # Objetivo del ataque
@@ -24,18 +24,20 @@
 Durante el reconocimiento comenzaría haciendo las siguientes acciones:
 
 - (**T1595**) - Active Scanning: con el propósito de identificar puertos comunes de comunicación (21:FTP, 22:SSH, 1433 MSSQL, 3306 MySQL, 3389 Remote Desktop, 5632 PCAnywhare).
-Utilicé: https://dnschecker.org/port-scanner.php
 
-![dnsPortCheck](dnsportCheck.png)
+    Utilicé: https://dnschecker.org/port-scanner.php
+
+<center><img src="dnsportCheck.png" alt="dnsportCheck" width="80%" height="50%"/></center>
 
 - **(T1593.001)** Search Open Websites/Domains:
     - **(T1593.001) - Social Media**: Redes sociales que se encuentren en el sitio, búsqueda de seguidores, empleados o incluso dueños. 
 
-    ![SocialMedia](SocialMedia.png)
+    <center><img src="SocialMedia.png" alt="SocialMedia" width="80%" height="50%"/></center>
 
     - **(T1591.001) - Determine Physical Locations**: Lugares donde pudieran se pudieran encontrar los activos.
 
-     ![SocialMedia](Social-Facebook.png)
+    <center><img src="Social-Facebook.png" alt="Social-Facebook" width="80%" height="50%"/></center>
+
 
 - **(T1597) - Search Closed Sources**:
     - **(T1597.002)** Purchase Technical Data: con el objetivo de conocer el circuito de compra y poder obtener cuentas a las cuales se gira el dinero, CUIT, CUIL, entidades bancarias haría una compra de algún elemento de la tienda.
