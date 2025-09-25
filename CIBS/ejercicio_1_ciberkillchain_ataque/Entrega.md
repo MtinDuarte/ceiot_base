@@ -9,7 +9,7 @@
 - Una opción es una plataforma web, que puede ser accedida através de una IP pública por usuario y contraseña. La segunda opción es através de una aplicación de celular con S.O Android. 
 - Los datos de las plantas y su pertenencia de cada cliente son almacenados en una base de datos en AWS para su procesamiento, pago mensual, usuario y contraseña. 
 
-<center><img src="sistemaPropuestoIA.png" alt="sistemaPropuestoIA" width="40%"/></center>
+<center><img src="sistemaPropuestoIA.png" alt="sistemaPropuestoIA" width="40%" hidden= "true" ></center>
 
 
 # Objetivo del ataque
@@ -27,16 +27,16 @@ Durante el reconocimiento comenzaría haciendo las siguientes acciones:
 
     Utilicé: https://dnschecker.org/port-scanner.php
 
-<center><img src="dnsportCheck.png" alt="dnsportCheck" width="80%" height="50%"/></center>
+<center><img src="dnsportCheck.png" alt="dnsportCheck" width="80%" height="50%" hidden = "true" /></center>
 
 - **(T1593.001)** Search Open Websites/Domains:
     - **(T1593.001) - Social Media**: Redes sociales que se encuentren en el sitio, búsqueda de seguidores, empleados o incluso dueños. 
 
-    <center><img src="SocialMedia.png" alt="SocialMedia" width="80%" height="50%"/></center>
+    <center><img src="SocialMedia.png" alt="SocialMedia" width="80%" height="50%" hidden = "true"></center>
 
     - **(T1591.001) - Determine Physical Locations**: Lugares donde pudieran se pudieran encontrar los activos.
 
-    <center><img src="Social-Facebook.png" alt="Social-Facebook" width="80%" height="50%"/></center>
+    <center><img src="Social-Facebook.png" alt="Social-Facebook" width="80%" height="50%" hidden = "true"></center>
 
 
 - **(T1597) - Search Closed Sources**:
@@ -90,8 +90,6 @@ Al tener las credenciales comprometidas, como atacante puede utilizar la técnic
 Si el script se encuentra en el sistema, no se hace nada, en caso de no estar en el lugar esperado, se desencadena una re-instalación del script como un proceso de inicio del sistema operativo. 
 
 Opcional: Se buscaría programar el script para ejecutarse al mismo tiempo que se hacen las actualizaciones de paquetes de software, por ejemplo __"Windows Update"__ o al momento de ejecutar **"apt-upgrade"** en Linux. De esta manera sería menos probable ser detectado.
-
-
 
 ## Command & Control
 
