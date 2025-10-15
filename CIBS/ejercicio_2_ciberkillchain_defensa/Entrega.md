@@ -9,30 +9,72 @@ Desarrollar la defensa en función del ataque planteado en orden inverso, mencio
 ## Resolución
 
 - Actions on Objectives
-    > Resumen: Detectar que el atacante usa los datos robados. Mitigación: cifrar los datos o utilizar pasarela de compras. Implementar doble factor al finalizar la compra. 
+    > **Resumen**: Incorporar formularios de envío de reportes de clientes. Desarrollar API de consultas de contraseña vulnerada. 
 
-    - **Detección**: Se detecta inicio de sesiones de lugares no frecuentes o dispositivos no registrados en la plataforma asociados a un usuario.
-
+    - **Detección**: Se detectan emails de clientes con reportes de substracción de credenciales y usos de métodos de pago inusuales.
+    
     - **Mitigación**: 
-        - **Cifrar datos**: Al momento de ejecutar la transacción, en lugar de utilizar un formulario de pago, usar un token de un solo uso para hacer la compra. 
+        - **Generar API de contraseñas vulneradas**: Generar API para aviso de contraseña vulnerada (por ejemplo *HaveIbeenpwned*), en la que la web pueda advertir al usuario que sus datos fueron víctima de vulneración / brecha.
 
-        - **Implementar multifactor**: En caso de que el skimmer haya robado datos, implementar en la web doble factor con el objetivo que al finalizar la compra solicite un verificación en otro dispositivo. 
+        - **Pasarela de pagos**: Relegar seguridad sobre pasarelas de pagos de terceros como Mercado Pago, Paypal u otros. 
 
 
 - Command & Control
-    > Resumen: Detección de un tráfico inusual bajo un usuario desconocido. Mitigación: limitar el acceso del usuario y gestionar reglas de tráfico para restringir la comunicación.
-    
-    - **Detección**: Se detecta solicitudes que no corresponden a un usuario de la organización/empresa.
+    > Resumen: Romper la conexión del atacante e impedir la extracción de datos.  
+        
+    - **Detección**:
+        - **Aviso de actividad (Beaconing)**: Detectar tráfico de red saliente pequeño y periódico desde el servidor Nginx a dominios IP o hosts desconocidos (el beacon o baliza). 
 
     - **Mitigación**:
-        - Se quitan permisos del usuario desconocido. 
-        - Se añaden reglas de firewall para bloqueo de tráfico entrante y saliente a la IP destino donde se verificó tráfico inusual.
+        - **Reglas de Firewall (o Proxy)**: Implementar reglas de salida estrictas que solo permitan al servidor web comunicarse con una lista blanca de dominios conocidos (ej., pasarela de pago). Todo lo demás es bloqueado.
 
+    - **Detección**: 
+        - **Eventos inusuales para server Nginx**: Se detecta que el servidor Nginx estaría borrando archivos.
+
+        - **Mitigación**: Configurar el mínimo Privilegio para Nginx para que corra con un usuario que solo tenga permisos de lectura y escritura limitada (solo en logs y cache), negándole el permiso de borrado en el resto de directorios sensibles.
+        
 - Instalación:
-    - **Detección**: Se verifican los logs de actividad del sistema, y se encuentran inicios de sesión bajo ssh de un usuario que no se tiene información.
-
-    - **Mitigación**: Deshabilitar momentaneamente el tráfico SSH. 
     
-    Luego verificar y posteriormente elimnar las claves públicas generadas por el usuario desconocido.
+    > Resumen: Se detectan diferencias respecto a la versión "release" de Nginx.  
+    
+    - **Detección**: Se compara la lista de archivos binarios (.so) en el directorio de módulos del servidor comprometido con la lista de módulos esperados para esa versión de release.
+
+    - **Mitigación**: No permitir que Nginx pueda realizar modificaciones sobre archivos de configuración (como la ruta: /etc/nginx/nginx.conf)
+
+
+- Explotación:
+    > Resumen: Detectar inicios de sesión sospechosos. 
+
+    - **Detección**: Por medio de monitoreo, se detectan inicios de sesiones de lugares no frecuentes de dispositivos no registrados en la plataforma asociados a un usuario.
+
+    - **Mitigación**: 
+        - **Implementar multifactor**: En caso de detectar inicio de sesiones de dispositivos no frecuentes, pedir multifactor de autenticación.
+
+- Delivery:
+    > Resumen: Instalación de antivirus, filtro de phishing y denuncias. 
+
+    - **Detección**: Se detectan varios e-mails de correos no deseados en los administradores del servidor. 
+
+    - **Mitigación**: Verificar últimas versiones del navegador web. Denunciar como *phishing* en caso de poder detectar al menos un correo.
+    Instalar un Antivirus en las máquinas de trabajo de los administradores para detectar y bloquear la ejecución de malware (actualizado). 
+
+
+- Weaponization:
+    - Sin interacción.
+
+
+- Reconnaissance:
+    > Resumen: Asegurarse de contar con versiones de Nginx actualizadas y que no tengan vulnerabilidades de día cero. Ser precavido con la información que se publica.
+
+    - **Detección**: Se detectó que la versión de Nginx que se encuentra en el servidor tiene una release con parches de seguridad.
+
+    - **Mitigación**:
+        - Minimizar al máximo la posibilidad de que un atacante pueda entrar por esa brecha y planificar una migración de versiones de Nginx.
+    
+        - Reducir al mínimo el número de puertos expuestos a internet.
+
+        - En lo posible, evitar publicar en redes sociales lugares de trabajo o información sensible que pueda ser útil para el contacto del atacante a la víctima. 
+
+
 
 

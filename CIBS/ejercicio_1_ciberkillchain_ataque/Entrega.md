@@ -66,7 +66,7 @@ Comienzo haciendo las siguientes acciones:
 
 > Resumen: Se **ASUME** que se robaron datos/credenciales administrador-root satisfactoriamente de la fase *delivery* y puertos abiertos *ssh* de la fase de reconocimiento. 
 
-1. **Acceso Remoto**: Se inicia sesión en el servidor web  utilizando las credenciales comprometidas.
+1. **Acceso Remoto**: Se inicia sesión en el servidor web utilizando las credenciales comprometidas.
 2. **Carga del Arma**: Una vez dentro del sistema operativo del servidor, el atacante ejecuta la orden para cargar el archivo del skimmer al directorio de destino (ej., /usr/lib/nginx/modules/).
 
 
